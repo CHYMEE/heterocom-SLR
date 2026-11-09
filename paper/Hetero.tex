@@ -31,23 +31,47 @@ Federated learning, industrial Internet of Things, model compression, heterogene
 \section{Introduction}
 \label{sec:introduction}
 
-Industrial Internet of Things (IIoT) deployments increasingly rely on distributed sensing and computation across devices with unequal processor, memory, energy, and communication capabilities. Federated learning (FL) offers a way to train shared models across distributed data holders while retaining data locally. In practice, however, conventional FL assumptions can be strained by hardware heterogeneity, and compression techniques may create client models or updates that are not directly compatible with a common aggregation procedure. A further challenge is establishing the integrity and provenance of updates without imposing excessive verification overhead on constrained systems.
+Industrial Internet of Things (IIoT) deployments bring computation and data generation to connected devices in industrial settings. Federated learning (FL) is relevant to this setting because participants can train locally and contribute model updates without pooling their raw data. Prior reviews have examined FL in IoT generally and the resource-optimization challenges associated with it~\cite{hosseinzadeh2022iot,ferreira2023resource}. However, keeping data local does not by itself resolve the constraints of deploying collaborative learning across devices with different computational and communication resources.
 
-These challenges have motivated work on compressed and heterogeneous FL, robust or asynchronous aggregation, and blockchain-supported trust and auditability. The evidence is distributed across neighboring research areas, and terminology is inconsistent. In particular, system heterogeneity (differences in device capabilities and model execution) should be distinguished from statistical data heterogeneity (differences in client data distributions). Blockchain use as a general audit log should likewise be distinguished from a verification mechanism tied to a defined integrity threat.
+These resource differences motivate a closer examination of compression in FL. A system may use a common compression setting, assign settings to predefined device classes, or select compression based on a device's current resource state; these approaches represent different levels of adaptation. When clients use differently sized or represented models, the method must also explain how their updates are combined. In this review, empirical performance alone is not treated as a convergence guarantee: the analysis asks whether a study provides a formal result for aggregation under the model mismatch it considers.
 
-This review provides an expository synthesis intended to help researchers understand these design choices, compare reported evidence, and identify open problems. It asks whether and how existing studies address five capabilities relevant to resource-constrained IIoT: (a) compression ratios selected from live resource profiles, (b) convergence-guaranteed aggregation across mismatched submodel sizes, (c) metadata-forgery threat models, (d) constant-complexity on-chain integrity verification, and (e) evaluation across heterogeneous hardware tiers. The review does not treat the absence of a capability in the screened corpus as proof that no such work exists outside the defined search and eligibility scope.
+Trust and verification form a related, but distinct, part of the problem. Blockchain may be used to coordinate or record learning activity, yet recording a submitted value does not by itself establish that the value is correct. In particular, a system needs to specify what claim about a participant's update or contribution metadata is checked, how it is checked, and what verification cost is incurred. This distinction matters to the review because generic blockchain use, generic Byzantine defenses, and explicit protection against contribution-metadata forgery are not equivalent evidence.
 
-Prior reviews already cover adjacent intersections. For example, Solis et al. examine fog computing, blockchain, and FL for IoT, while Ferreira da Silva et al. review resource optimization in FL for IoT; broader FL-IoT review work also predates the present search~\cite{solis2024synergy,ferreira2023resource,hosseinzadeh2022iot}. Accordingly, this review is positioned around its explicitly operationalized capability criteria, consensus-coded primary-study matrix, and cross-capability synthesis, rather than a claim to be the first review connecting FL, blockchain, and IoT.
+Existing reviews offer important context for this work. Solis et al. examine fog computing, blockchain, and FL across IoT applications; Ferreira da Silva et al. review resource optimization in FL for IoT; and Hosseinzadeh et al. survey FL-based IoT more broadly~\cite{solis2024synergy,ferreira2023resource,hosseinzadeh2022iot}. The present review complements these studies by focusing its synthesis on five explicit capabilities relevant to heterogeneous-compression FL and blockchain-based verification in resource-constrained IIoT. It does not claim that these technologies have not previously been reviewed together. Instead, it applies defined study-level criteria to assess how fully the selected primary studies address each capability and which combinations are represented in the review corpus.
+
+The objective is to provide researchers with a structured account of the evidence and a clear basis for identifying research and evaluation gaps. The five capabilities are: (1) compression selected from live device resources; (2) aggregation across differently sized models with a convergence guarantee; (3) an explicit threat model and defense for contribution-metadata forgery; (4) on-chain verification with constant complexity; and (5) evaluation across heterogeneous hardware tiers. They are coded separately, so a paper need not address all five to inform the synthesis. The review also distinguishes system heterogeneity, referring here to differences in device resources and execution, from statistical data heterogeneity such as non-identical client data distributions. Findings are limited to the search, eligibility criteria, and included studies; an unobserved capability in this corpus is not evidence that it is absent from all research.
+
+The review is guided by the following questions:
+\begin{enumerate}
+  \item How are compression settings selected for clients with different or changing resource profiles?
+  \item How are updates aggregated when client models differ in size or representation, and what convergence analysis is provided?
+  \item What threat models and mechanisms explicitly address forged contribution metadata?
+  \item What on-chain verification methods claim constant complexity, and what implementation overhead is reported?
+  \item How often are the five capabilities evaluated together, and which combinations remain unaddressed in the included corpus?
+\end{enumerate}
 
 The contributions of this review are:
 \begin{itemize}
-  \item a structured account of the research landscape spanning heterogeneous compression, FL aggregation, integrity threats, blockchain verification, and IIoT evaluation;
-  \item a consensus-coded evidence matrix of 293 included studies, with conservative resolution of differences in ordinal capability scores;
-  \item a synthesis of capability coverage and combinations that remain unaddressed in the included corpus; and
-  \item a researcher-oriented agenda for making methods, threat models, overhead measurements, and heterogeneous testbeds more comparable.
+  \item a synthesis organized around five explicitly defined capabilities rather than broad technology labels;
+  \item a consensus evidence matrix covering the 293 included studies, with differences in ordinal capability scores resolved using the more conservative score;
+  \item a corpus-bounded assessment of individual capability coverage and their co-occurrence; and
+  \item researcher-oriented priorities for reporting and evaluating resource adaptation, aggregation guarantees, metadata integrity, verification cost, and hardware heterogeneity.
 \end{itemize}
 
-The remainder of this paper describes the review method in Section~\ref{sec:methods}, reports the selection flow and evidence synthesis in Section~\ref{sec:results}, discusses implications and open research directions in Section~\ref{sec:discussion}, considers limitations in Section~\ref{sec:limitations}, and concludes in Section~\ref{sec:conclusion}.
+The remainder of this paper is organized as follows. Section~\ref{sec:background} clarifies the scope and relationship to prior reviews. Section~\ref{sec:methods} describes the review protocol, search, screening, and coding process. Section~\ref{sec:results} presents the selection flow and capability synthesis. Section~\ref{sec:discussion} interprets the findings and identifies research directions; Section~\ref{sec:limitations} discusses limitations; and Section~\ref{sec:conclusion} concludes the paper.
+
+\section{Scope and Related Work}
+\label{sec:background}
+
+\subsection{Distinctions central to the review}
+\label{subsec:scope-distinctions}
+
+This review evaluates capabilities that are often discussed together but require distinct evidence. System heterogeneity concerns differences in device resources and execution; it is not established solely by non-IID client data. Heterogeneous compression concerns variation in model or update representation, while convergence-guaranteed aggregation requires an analysis of how those mismatched representations are combined. Likewise, storing FL events on a blockchain is not by itself evidence that contribution metadata is verified. These distinctions underpin the five capability definitions and prevent a general claim of heterogeneity, robustness, or blockchain use from being counted as evidence for a more specific capability.
+
+\subsection{Relationship to prior reviews}
+\label{subsec:related-review-position}
+
+Solis et al. review fog computing, blockchain, and FL across IoT applications; Ferreira da Silva et al. focus on resource optimization in FL for IoT; and Hosseinzadeh et al. survey FL-based IoT more broadly~\cite{solis2024synergy,ferreira2023resource,hosseinzadeh2022iot}. The present review complements these works by applying explicit, study-level criteria to the five capabilities above in resource-constrained IIoT research. Its purpose is not to claim that related topics have never been reviewed, but to show how completely the selected primary studies address these particular capabilities and their combinations.
 
 \section{Review Method}
 \label{sec:methods}
