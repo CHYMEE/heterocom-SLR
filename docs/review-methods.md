@@ -14,24 +14,22 @@ The review questions cover compression-ratio selection, aggregation across misma
 
 ## Sources and search period
 
-The recorded data-collection period was July 1–September 1, 2026. Searches covered IEEE Xplore, the ACM Digital Library, Google Scholar, Web of Science, and Scopus. The final locked database-record counts are:
+The recorded data-collection period was July 1–September 1, 2026. Searches covered IEEE Xplore, the ACM Digital Library, Google Scholar, Web of Science, and Scopus. The aggregate identification count used in the review is 4,475. The collection summary lists the following source yields; verify them against the original database exports before submission:
 
 | Source | Records |
 |---|---:|
-| IEEE Xplore | 1,565 |
+| IEEE Xplore | 1,566 |
 | ACM Digital Library | 686 |
-| Google Scholar | 829 |
+| Google Scholar | 866 |
 | Web of Science | 636 |
 | Scopus | 721 |
-| **Total** | **4,437** |
+| **Total** | **4,475** |
 
-Backward reference-list checking and forward citation searching (snowballing) were performed. The reviewers report that citation searching yielded **no additional eligible studies beyond the 4,437-record set**.
+Backward reference-list checking and forward citation searching (snowballing) were performed. The reviewers report that citation searching yielded **no additional eligible studies beyond the identified set**.
 
 Search concepts combined synonyms for FL, model compression/heterogeneity, blockchain/integrity verification, and industrial/resource-constrained IoT, with database-specific syntax. The exact executed query for each source and the exact per-source run date should be copied from the original database search histories or Zotero export log into the supplementary search strategy; they are not reconstructed here.
 
-### Reconciliation decision for conflicting collection screenshots
-
-The final manuscript uses the locked source-level yields in the table above (4,437 records), not the separate Zotero screenshot showing 4,475 items. The locked source yields sum to 4,437 and reconcile exactly with the subsequent selection flow: 4,437 − 1,320 = 3,117. The screenshot's stage totals sum to 4,475; its displayed source totals sum to 4,474 because the IEEE Xplore source total (1,565) is one lower than its displayed A–E stage subtotal (1,566). It also reports 866 Google Scholar items rather than the locked 829. Thus the screenshot differs by 38 items from the locked aggregate, with a further one-item internal discrepancy in the screenshot's IEEE row. The available materials do not establish which records account for this difference. We therefore treat that screenshot as a preliminary, superseded collection snapshot—not an additional PRISMA stage—and do not assign the 38 records to duplicates or exclusions without record-level provenance. Before submission, retain the search exports/Zotero history that supports the locked counts; if those exports instead support 4,475, revise the flow and all downstream totals together.
+The aggregate count and source-level yields above are transcribed from the collection summary. The aggregate reconciles with the documented deduplication and screening flow, but the per-source yields still require verification against the original exports. The review therefore uses 4,475 as the aggregate identification count and does not infer a source-level correction without export provenance.
 
 ## Eligibility
 
@@ -41,27 +39,31 @@ Exclusions included pre-2022 or non-English studies; inaccessible full texts; re
 
 ## Record management and screening
 
-1. Search results were managed in Zotero, with source-specific collections visible in the project records.
-2. The locked flow records 4,437 identified records and 1,320 duplicates removed, leaving 3,117 records for title/abstract screening.
-3. Two reviewers screened titles and abstracts independently and blind to each other's decisions in Rayyan. Clearly out-of-scope records were excluded; uncertain records were retained for closer review.
-4. Full texts were assessed independently by two reviewers against the inclusion criteria, with exclusion reasons recorded.
-5. Reviewer disagreements were resolved through reconciliation. The project reports 28 decision conflicts resolved. The final title/abstract exclusion total includes eight further exclusions settled during reconciliation.
-6. Citation searching was performed; it added no eligible studies beyond the locked search set.
+1. Search results were managed in Zotero, with source-specific collections.
+2. The collection record reports that Zotero duplicate detection identified 2,221 items and 1,346 items were deleted on September 16–17, 2026. The Zotero export contained 3,129 records. On September 18, Rayyan identified 26 further duplicates; 12 were deleted, leaving 3,117 records. The exact matching rules used by either tool are not documented.
+3. Two reviewers screened records independently in Rayyan with blind mode enabled. Title-only screening ran from September 23 through October 7, 2026: 2,402 records were retained and 715 excluded.
+4. Abstract screening ran from October 8 through 18, 2026: 331 records were retained and 2,071 excluded.
+5. During reviewer reconciliation, eight of the 331 records retained after abstract screening were determined ineligible before full-text assessment. Thus, 2,786 records were excluded at title/abstract screening and eight more at reconciliation, for 2,794 exclusions and 323 full texts assessed. Full texts were independently assessed by two reviewers, with exclusion reasons recorded. The project reports 28 decision conflicts resolved.
+6. Citation searching was performed; it added no eligible studies beyond the identified set.
 7. Inter-rater agreement was calculated before consensus resolution: title/abstract Cohen's κ approximately 0.61, with approximately 91% raw agreement over 3,117 records; full-text inclusion κ = 0.615, with 92.5% raw agreement over 319 paired decisions. Four of the 323 full-text decisions lacked paired independent ratings and therefore were not in the kappa calculation; they remained in the final selection decisions.
 
 ### Locked PRISMA counts
 
 | Stage | Count |
 |---|---:|
-| Records identified in databases | 4,437 |
-| Duplicates removed | 1,320 |
+| Records identified in databases | 4,475 |
+| Duplicates removed in Zotero | 1,346 |
+| Additional duplicates removed in Rayyan | 12 |
 | Records screened by title/abstract | 3,117 |
-| Title/abstract exclusions after reconciliation | 2,794 |
+| Title-only exclusions | 715 |
+| Abstract-stage exclusions | 2,071 |
+| Additional records determined ineligible during reconciliation | 8 |
+| Total exclusions before full-text assessment | 2,794 |
 | Full texts assessed | 323 |
 | Full-text exclusions | 30 |
 | Studies included in synthesis | 293 |
 
-The counts reconcile: 4,437 − 1,320 = 3,117; 3,117 − 2,794 = 323; and 323 − 30 = 293. Snowballing yielded no additional eligible studies. The full-text kappa denominator is 319 paired decisions, not the 323 full texts assessed.
+The counts reconcile: 4,475 − 1,346 − 12 = 3,117; 715 + 2,071 + 8 = 2,794; 3,117 − 2,794 = 323; and 323 − 30 = 293. Snowballing yielded no additional eligible studies. The full-text kappa denominator is 319 paired decisions, not the 323 full texts assessed.
 
 ## Full-text assessment and extraction in Excel
 
@@ -104,7 +106,7 @@ Software versions and the exact Zotero duplicate-detection settings are not reco
 
 - Attach a supplementary file containing the exact query string and run date for each source, copied from the actual search histories; do not recreate queries from memory.
 - Retain/export the Zotero deduplication report or document whether duplicate removal combined automatic matching with manual review.
-- Preserve the source exports/Zotero history supporting the locked 4,437 count and per-source yields; do not infer a disposition for the 38-record screenshot discrepancy without record-level provenance.
+- Preserve the source exports supporting the 4,475 aggregate identification count and verify each per-source yield before submission; do not revise source-level totals without export provenance.
 - Confirm whether a formal risk-of-bias/study-quality assessment was conducted. No separate appraisal instrument was documented in the reviewed project files.
 - Complete the PRISMA 2020 checklist and PRISMA-S search-reporting checklist; link each item to its manuscript location or supplementary material.
 - Confirm team author names/affiliations and journal-specific review article requirements before submission.

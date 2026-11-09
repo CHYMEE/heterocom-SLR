@@ -21,7 +21,7 @@
 \maketitle
 
 \begin{abstract}
-Federated learning (FL) can support collaborative model training across industrial Internet of Things (IIoT) devices without centralizing raw data, but resource heterogeneity, incompatible compressed models, and trust in recorded updates remain practical challenges. This systematic literature review synthesizes evidence on heterogeneous-compression FL and blockchain-based verification for resource-constrained IIoT. Searches across IEEE Xplore, the ACM Digital Library, Google Scholar, Web of Science, and Scopus identified 4,437 records. After removal of 1,320 duplicates, 3,117 records underwent title and abstract screening; 2,794 were excluded after reviewer reconciliation, 323 full texts were assessed, 30 were excluded, and 293 studies were included. Two reviewers screened independently and resolved conflicts by consensus. Inter-rater agreement was Cohen's $\kappa\approx0.61$ for title and abstract screening and $\kappa=0.615$ for full-text inclusion (319 paired decisions). The evidence was coded across five capabilities: compression selected from live resource profiles, convergence-guaranteed aggregation across mismatched models, metadata-forgery threat modeling, $O(1)$ on-chain verification, and heterogeneous multi-tier evaluation. No included study was coded Yes for the first two capabilities, and no study satisfied all five. These results identify under-addressed combinations in the reviewed corpus and motivate a research agenda for resource-aware compression, principled aggregation, explicit integrity threat models, and reproducible multi-tier evaluation.
+Federated learning (FL) can support collaborative model training across industrial Internet of Things (IIoT) devices without centralizing raw data, but resource heterogeneity, incompatible compressed models, and trust in recorded updates remain practical challenges. This systematic literature review synthesizes evidence on heterogeneous-compression FL and blockchain-based verification for resource-constrained IIoT. Searches across IEEE Xplore, the ACM Digital Library, Google Scholar, Web of Science, and Scopus identified 4,475 records. After 1,346 Zotero duplicate deletions and 12 further Rayyan duplicate deletions, 3,117 records underwent title screening; 715 were excluded and 2,402 proceeded to abstract screening, where 2,071 were excluded and 331 retained. Eight records were determined ineligible during reconciliation before full-text assessment, leaving 323 full texts assessed; 30 were excluded, and 293 studies were included. Two reviewers screened independently and resolved conflicts by consensus. Inter-rater agreement was Cohen's $\kappa\approx0.61$ for title and abstract screening and $\kappa=0.615$ for full-text inclusion (319 paired decisions). The evidence was coded across five capabilities: compression selected from live resource profiles, convergence-guaranteed aggregation across mismatched models, metadata-forgery threat modeling, $O(1)$ on-chain verification, and heterogeneous multi-tier evaluation. No included study was coded Yes for the first two capabilities, and no study satisfied all five. These results identify under-addressed combinations in the reviewed corpus and motivate a research agenda for resource-aware compression, principled aggregation, explicit integrity threat models, and reproducible multi-tier evaluation.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -31,92 +31,119 @@ Federated learning, industrial Internet of Things, model compression, heterogene
 \section{Introduction}
 \label{sec:introduction}
 
-Industrial Internet of Things (IIoT) deployments bring computation and data generation to connected devices in industrial settings. Federated learning (FL) is relevant to this setting because participants can train locally and contribute model updates without pooling their raw data. Prior reviews have examined FL in IoT generally and the resource-optimization challenges associated with it~\cite{hosseinzadeh2022iot,ferreira2023resource}. However, keeping data local does not by itself resolve the constraints of deploying collaborative learning across devices with different computational and communication resources.
+\subsection{Context and terminology}
 
-These resource differences motivate a closer examination of compression in FL. A system may use a common compression setting, assign settings to predefined device classes, or select compression based on a device's current resource state; these approaches represent different levels of adaptation. When clients use differently sized or represented models, the method must also explain how their updates are combined. In this review, empirical performance alone is not treated as a convergence guarantee: the analysis asks whether a study provides a formal result for aggregation under the model mismatch it considers.
+Industrial Internet of Things (IIoT) systems connect devices that generate data and perform computation in industrial environments. Federated learning (FL) provides a way for participants to train models locally and share updates without pooling their raw data. However, local training alone does not resolve the differences among devices in computation, memory, energy, and communication capacity. Reviews of FL in IoT and its resource-optimization challenges establish this as an active area of study~\cite{hosseinzadeh2022iot,ferreira2023resource}; the practical question addressed here is how the relevant system capabilities are combined and evaluated for resource-constrained IIoT.
 
-Trust and verification form a related, but distinct, part of the problem. Blockchain may be used to coordinate or record learning activity, yet recording a submitted value does not by itself establish that the value is correct. In particular, a system needs to specify what claim about a participant's update or contribution metadata is checked, how it is checked, and what verification cost is incurred. This distinction matters to the review because generic blockchain use, generic Byzantine defenses, and explicit protection against contribution-metadata forgery are not equivalent evidence.
+\subsection{Technical problem}
 
-Existing reviews offer important context for this work. Solis et al. examine fog computing, blockchain, and FL across IoT applications; Ferreira da Silva et al. review resource optimization in FL for IoT; and Hosseinzadeh et al. survey FL-based IoT more broadly~\cite{solis2024synergy,ferreira2023resource,hosseinzadeh2022iot}. The present review complements these studies by focusing its synthesis on five explicit capabilities relevant to heterogeneous-compression FL and blockchain-based verification in resource-constrained IIoT. It does not claim that these technologies have not previously been reviewed together. Instead, it applies defined study-level criteria to assess how fully the selected primary studies address each capability and which combinations are represented in the review corpus.
+The review focuses on three related technical concerns. First, model compression can reduce the resources required for training or communication, but a common setting, a predefined device-tier setting, and a setting selected from current device resources are not equivalent forms of adaptation. Second, differing compression levels may produce model updates with different sizes or representations. Studies must therefore specify how the updates are reconciled; empirical results alone do not establish a convergence guarantee for aggregation under such mismatch. Third, blockchain may support coordination or record keeping, but storing a submitted value does not itself verify its correctness. A verification claim must identify what is checked, including whether the system addresses false contribution metadata, and what computational or on-chain overhead the check entails.
 
-The objective is to provide researchers with a structured account of the evidence and a clear basis for identifying research and evaluation gaps. The five capabilities are: (1) compression selected from live device resources; (2) aggregation across differently sized models with a convergence guarantee; (3) an explicit threat model and defense for contribution-metadata forgery; (4) on-chain verification with constant complexity; and (5) evaluation across heterogeneous hardware tiers. They are coded separately, so a paper need not address all five to inform the synthesis. The review also distinguishes system heterogeneity, referring here to differences in device resources and execution, from statistical data heterogeneity such as non-identical client data distributions. Findings are limited to the search, eligibility criteria, and included studies; an unobserved capability in this corpus is not evidence that it is absent from all research.
+\subsection{Previous reviews}
 
-The review is guided by the following questions:
+These concerns motivate a capability-based synthesis rather than treating broad labels such as “heterogeneous,” “robust,” or “blockchain-based” as sufficient evidence. Prior reviews have examined fog computing, blockchain, and FL together in IoT applications, resource optimization in FL for IoT, and FL-based IoT more generally~\cite{solis2024synergy,ferreira2023resource,hosseinzadeh2022iot}. This review complements that work by assessing primary studies against five explicit capabilities relevant to heterogeneous-compression FL and blockchain-based verification in resource-constrained IIoT. Its purpose is not to claim that related technologies have not previously been reviewed together, but to determine how completely the included studies address these specific capabilities and which combinations are represented in the corpus.
+
+\subsection{Review objective and questions}
+
+This review examines how the included primary studies address five capabilities: live-resource-driven compression; convergence-guaranteed aggregation across model mismatch; explicit metadata-forgery threat modeling and defense; $O(1)$ on-chain verification; and evaluation across heterogeneous hardware tiers. It asks:
 \begin{enumerate}
   \item How are compression settings selected for clients with different or changing resource profiles?
-  \item How are updates aggregated when client models differ in size or representation, and what convergence analysis is provided?
-  \item What threat models and mechanisms explicitly address forged contribution metadata?
-  \item What on-chain verification methods claim constant complexity, and what implementation overhead is reported?
-  \item How often are the five capabilities evaluated together, and which combinations remain unaddressed in the included corpus?
+  \item How are differently sized or represented client updates aggregated, and what convergence analysis is provided?
+  \item What threat models and mechanisms address forged contribution metadata?
+  \item What on-chain verification methods claim constant complexity, and what overhead do they report?
+  \item How often are the five capabilities evaluated together, and which combinations remain unaddressed?
 \end{enumerate}
+System heterogeneity refers to differences in device resources and execution, not solely to statistical data heterogeneity such as non-identical client data distributions. The capabilities are coded independently; studies need not satisfy all five to contribute evidence to the review. The review reports 4,475 identified records and includes 293 studies in the final evidence synthesis. Conclusions are restricted to the search, eligibility criteria, and included corpus; absence of a capability from this corpus does not establish its absence from all research.
+
+\subsection{Contributions and paper organization}
 
 The contributions of this review are:
 \begin{itemize}
-  \item a synthesis organized around five explicitly defined capabilities rather than broad technology labels;
-  \item a consensus evidence matrix covering the 293 included studies, with differences in ordinal capability scores resolved using the more conservative score;
-  \item a corpus-bounded assessment of individual capability coverage and their co-occurrence; and
+  \item an operationalized five-capability framework that distinguishes complete, partial, and absent evidence in the primary studies;
+  \item a consensus evidence matrix for 293 included studies, with ordinal scoring differences resolved using the more conservative score;
+  \item a corpus-bounded assessment of individual capability coverage and their co-occurrence, including the finding that no included study satisfies all five capabilities; and
   \item researcher-oriented priorities for reporting and evaluating resource adaptation, aggregation guarantees, metadata integrity, verification cost, and hardware heterogeneity.
 \end{itemize}
 
-The remainder of this paper is organized as follows. Section~\ref{sec:background} clarifies the scope and relationship to prior reviews. Section~\ref{sec:methods} describes the review protocol, search, screening, and coding process. Section~\ref{sec:results} presents the selection flow and capability synthesis. Section~\ref{sec:discussion} interprets the findings and identifies research directions; Section~\ref{sec:limitations} discusses limitations; and Section~\ref{sec:conclusion} concludes the paper.
+The remainder of this paper is organized as follows. Section~\ref{sec:background} defines the concepts and positions the review relative to prior work. Section~\ref{sec:methods} presents the review plan and conduct. Section~\ref{sec:results} reports the selection flow and synthesizes evidence against the five capabilities. Section~\ref{sec:discussion} interprets the findings and identifies challenges and opportunities. Section~\ref{sec:limitations} discusses limitations, and Section~\ref{sec:conclusion} concludes with implications for future work. Figure~\ref{fig:paper-structure} summarizes this organization.
 
-\section{Scope and Related Work}
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.94\textwidth]{figures/paper_structure.pdf}
+  \caption{Organization of the review, from problem context and scope through method, evidence synthesis, discussion, limitations, and conclusion.}
+  \label{fig:paper-structure}
+\end{figure*}
+
+\section{Background and Related Work}
 \label{sec:background}
 
-\subsection{Distinctions central to the review}
+\subsection{IIoT and federated-learning context}
 \label{subsec:scope-distinctions}
 
-This review evaluates capabilities that are often discussed together but require distinct evidence. System heterogeneity concerns differences in device resources and execution; it is not established solely by non-IID client data. Heterogeneous compression concerns variation in model or update representation, while convergence-guaranteed aggregation requires an analysis of how those mismatched representations are combined. Likewise, storing FL events on a blockchain is not by itself evidence that contribution metadata is verified. These distinctions underpin the five capability definitions and prevent a general claim of heterogeneity, robustness, or blockchain use from being counted as evidence for a more specific capability.
+In this review, IIoT identifies the industrial deployment context, and FL identifies collaborative training in which participants retain local data and contribute model updates. The resource constraints of interest are differences in device computation, memory, energy, and communication capacity. These system-level differences are distinct from statistical data heterogeneity, such as non-identical data distributions among participants. The distinction matters because variation in client data alone does not establish that a method addresses differences in device capabilities.
 
-\subsection{Relationship to prior reviews}
+\subsection{Heterogeneous compression and aggregation}
+
+Heterogeneous compression refers here to clients using different compression levels or model/update representations. The review distinguishes static settings, assignments based on predefined device tiers, and settings selected using current device-resource information. When model representations differ, aggregation methods must explain how updates are reconciled; a convergence claim is coded as complete only when supported by a formal result meeting the review's operational criteria.
+
+\subsection{Blockchain-based integrity verification}
+
+Blockchain use and verification are treated as separate concepts. Recording learning events or submitted metadata in a ledger is not, on its own, evidence that the underlying information was checked. For this review, the relevant evidence specifies the integrity claim being verified, the mechanism that performs the check, and the associated verification complexity or reported overhead. In particular, defenses against forged contribution metadata are distinguished from general Byzantine defenses or update logging.
+
+\subsection{Positioning relative to prior reviews}
 \label{subsec:related-review-position}
 
 Solis et al. review fog computing, blockchain, and FL across IoT applications; Ferreira da Silva et al. focus on resource optimization in FL for IoT; and Hosseinzadeh et al. survey FL-based IoT more broadly~\cite{solis2024synergy,ferreira2023resource,hosseinzadeh2022iot}. The present review complements these works by applying explicit, study-level criteria to the five capabilities above in resource-constrained IIoT research. Its purpose is not to claim that related topics have never been reviewed, but to show how completely the selected primary studies address these particular capabilities and their combinations.
 
-\section{Review Method}
+\section{Systematic Literature Review Method}
 \label{sec:methods}
 
-\subsection{Review design and scope}
+\subsection{Planning the Review}
 \label{subsec:design}
+
+\subsubsection{Review design and scope}
 
 The review followed the process described in the project protocol and is reported using the PRISMA 2020 framework and literature-search reporting guidance~\cite{page2021prisma,rethlefsen2021prismas}. Its scope was defined using Population, Intervention, Comparison, Outcome, and Context (PICOC). The population was resource-constrained IIoT devices spanning different compute capabilities. The intervention covered heterogeneous or adaptive model compression in FL together with blockchain-based integrity or trust verification. Comparisons included uniform compression, standard robust aggregation, and conventional full-logging blockchain integration. Outcomes of interest included compression, convergence or accuracy, detection of Byzantine behavior or metadata forgery, and blockchain overhead such as gas, latency, and memory. The context was real or simulated resource-constrained industrial IoT rather than data-center FL or generic IoT without a resource constraint.
 
 The review addressed five research questions:
 \begin{enumerate}
-  \item What compression-ratio selection strategies are used in heterogeneous-compression FL?
-  \item How do existing methods aggregate updates when client submodels have mismatched sizes?
-  \item Which threat models and detection mechanisms address metadata forgery, as distinct from generic Byzantine behavior?
-  \item What on-chain verification approaches target $O(1)$ cost, and what gas, latency, or memory overhead is reported?
-  \item Which studies combine live-resource-driven compression with on-chain integrity verification, and what capability combinations remain unaddressed?
+  \item How are compression settings selected for clients with different or changing resource profiles?
+  \item How are differently sized or represented client updates aggregated, and what convergence analysis is provided?
+  \item What threat models and mechanisms address forged contribution metadata?
+  \item What on-chain verification methods claim constant complexity, and what overhead do they report?
+  \item How often are the five capabilities evaluated together, and which combinations remain unaddressed?
 \end{enumerate}
 
-\subsection{Information sources and search}
+\subsection{Conducting the Review}
+\label{subsec:conducting}
+
+\subsubsection{Information sources and search}
 \label{subsec:search}
 
-The database search covered IEEE Xplore, the ACM Digital Library, Google Scholar, Web of Science, and Scopus. Searches were conducted during the recorded collection period of July 1 through September 1, 2026, and the eligible publication period began in 2022. The recorded source yields were 1,565 from IEEE Xplore, 686 from the ACM Digital Library, 829 from Google Scholar, 636 from Web of Science, and 721 from Scopus, for 4,437 database records. Search concepts covered FL, compression and heterogeneity, blockchain or integrity verification, and industrial or resource-constrained IoT; database syntax was adapted to each source. Backward reference-list checking and forward citation searching were also performed. The reviewers report that citation searching yielded no additional eligible studies beyond the 4,437-record set.
+The database search covered IEEE Xplore, the ACM Digital Library, Google Scholar, Web of Science, and Scopus. Searches were conducted during the recorded collection period of July 1 through September 1, 2026, and the eligible publication period began in 2022. The aggregate identification count used in the review is 4,475 records. The collection summary lists 1,566 from IEEE Xplore, 686 from the ACM Digital Library, 866 from Google Scholar, 636 from Web of Science, and 721 from Scopus; these source-level yields remain subject to verification against the original exports. Search concepts covered FL, compression and heterogeneity, blockchain or integrity verification, and industrial or resource-constrained IoT; database syntax was adapted to each source. Backward reference-list checking and forward citation searching were also performed. The reviewers report that citation searching yielded no additional eligible studies beyond the identified set.
 
 The exact database-specific query strings and per-database execution dates should be supplied from the saved search histories or export logs in the supplementary search strategy. Software versions for Zotero, Rayyan, and Microsoft Excel were not recorded in the project files inspected and should be added if recoverable.
 
-\subsection{Eligibility criteria}
+\subsubsection{Eligibility criteria}
 \label{subsec:eligibility}
 
 Studies published from 2022 through the search period were eligible when they were peer-reviewed journal or top-tier conference papers, addressed at least two of heterogeneous compression, FL aggregation under mismatch, blockchain integrity or trust, and IIoT resource constraints, and reported at least one quantitative outcome relevant to the review.
 
 Studies were excluded when they were published before 2022, were not in English, had no accessible full text, had no peer-reviewed version, addressed only uniform compression without a heterogeneity dimension, concerned generic IoT or data-center FL without resource-constrained or industrial context, or used blockchain only as a log store without verification logic. Secondary studies (surveys, reviews, and taxonomies) were excluded from the primary evidence set and retained separately as related work. The screening distinguished hardware/system heterogeneity from non-IID data heterogeneity and applied the protocol's IIoT relevance criteria. At full text, reviewers read the methods and results and recorded one exclusion reason for each excluded paper.
 
-\subsection{Record management and screening tools}
+\subsubsection{Record management and screening tools}
 \label{subsec:tools}
 
-Search results from the five sources were managed in Zotero. The team reports removing 1,320 duplicate records before screening, leaving 3,117 records for title/abstract screening. Deduplication was carried out in Zotero; the exact combination of automated matching and manual review should be reported from the Zotero library or project log if available.
+Search results from the five sources were managed in Zotero. The collection record reports that Zotero duplicate detection identified 2,221 items and 1,346 items were deleted on September 16--17, 2026. The Zotero export contained 3,129 records; Rayyan identified 26 further duplicates, of which 12 were deleted on September 18, leaving 3,117 records for screening. The available records do not specify the exact matching rules used in either tool.
 
-The two reviewers used Rayyan to screen titles and abstracts independently and blind to one another's decisions. Records that were clearly outside scope were excluded; uncertain records were retained for full-text assessment. The same two-reviewer independent process was applied to full-text eligibility. Reviewers then reconciled disagreements and recorded a consensus decision and, for exclusions, a reason. The team reports resolving 28 decision conflicts through reconciliation. Eight additional title/abstract exclusions were settled during reconciliation, giving 2,794 title/abstract exclusions in the final flow and 323 full texts assessed. Of those, 30 were excluded and 293 studies were included.
+Two reviewers independently screened records in Rayyan with blind mode enabled. Title-only screening was conducted from September 23 through October 7, 2026: 2,402 of 3,117 records were retained and 715 excluded. Abstract screening followed from October 8 through 18, 2026: 331 records were retained and 2,071 excluded. During reviewer reconciliation, eight of the 331 records retained after abstract screening were determined ineligible before full-text assessment. Thus, 2,786 records were excluded at the title/abstract stages and eight more at reconciliation, for 2,794 exclusions before full-text assessment and 323 full texts assessed. Reviewers assessed full-text eligibility independently, reconciled disagreements, and recorded a consensus decision and an exclusion reason where applicable. The project reports 28 decision conflicts resolved through reconciliation. Of the 323 full texts, 30 were excluded and 293 studies were included.
 
-\subsection{Study selection and reviewer agreement}
+\subsubsection{Study selection and reviewer agreement}
 \label{subsec:screening}
 
 For title/abstract screening, reported inter-rater agreement was approximately 91\% raw agreement and Cohen's $\kappa\approx0.61$ across 3,117 screened records. For full-text inclusion, the reported agreement was 92.5\% with Cohen's $\kappa=0.615$ on 319 paired independent decisions. Four of the 323 full-text decisions did not have paired independent ratings and were not included in the kappa calculation; they remained part of the final screening decisions. Disagreements were resolved by consensus.
 
-\subsection{Data extraction and synthesis}
+\subsubsection{Data extraction and synthesis}
 \label{subsec:extraction}
 
 Data extraction and reconciliation were managed in Microsoft Excel. For each included study, the final consensus matrix records the title, authors, year, venue, DOI or URL; five capability scores; accuracy and F1; gas cost, latency, memory or overhead, and compression ratio when reported; dataset and hardware/testbed; and a concise contribution and limitation summary. Unreported metric values were left blank rather than inferred.
@@ -132,20 +159,20 @@ Each capability was coded Yes, Partial, or No using the following operational ru
 
 Reviewers first scored the five capabilities independently. Differences in ordinal capability scores were resolved conservatively: when ratings differed, the less complete rating was retained in the consensus matrix. The synthesis combines descriptive capability counts with qualitative comparison of methods, assumptions, threat models, reported metrics, and evaluation practices. The project files inspected document eligibility screening and construct-specific coding but do not document a separate formal risk-of-bias or study-quality instrument; confirm whether such an appraisal was conducted elsewhere before finalizing this statement.
 
-\subsection{Selection flow}
+\section{Results of the Systematic Literature Review}
+\label{sec:results}
+
+\subsection{Study-selection flow}
 \label{subsec:flow}
 
-The locked selection counts are 4,437 records identified, 1,320 duplicates removed, 3,117 records screened, 2,794 title/abstract exclusions after reconciliation, 323 full texts assessed, 30 full-text exclusions, and 293 included studies. Thus, the reconciled title/abstract exclusion count accounts for the eight additional exclusions settled during reconciliation, and 3,117 records minus 2,794 exclusions yields the 323 full texts assessed. Backward and forward citation searching was conducted but, according to the reviewers, yielded no additional eligible studies beyond this set. Figure~\ref{fig:prisma} summarizes the flow.
+The selection flow is 4,475 records identified, 1,346 duplicates deleted in Zotero, 12 further duplicates deleted in Rayyan, and 3,117 records screened. Title screening excluded 715 records and retained 2,402; abstract screening excluded 2,071 and retained 331. Eight of these 331 were then determined ineligible during reconciliation, leaving 323 full texts assessed. After 30 full-text exclusions, 293 studies remained for synthesis. The arithmetic reconciles: 4,475-1,346-12=3,117; 715+2,071+8=2,794 exclusions before full-text assessment; 3,117-2,794=323; and 323-30=293. Backward and forward citation searching yielded no additional eligible studies, according to the reviewers. Figure~\ref{fig:prisma} summarizes the flow.
 
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.9\textwidth]{figures/prisma_flow.pdf}
-  \caption{PRISMA-style flow of study identification, screening, eligibility assessment, and inclusion. The title/abstract exclusion total includes eight exclusions settled during reviewer reconciliation.}
+  \caption{PRISMA-style flow of study identification, screening, eligibility assessment, and inclusion. Eight records retained after abstract screening were determined ineligible during reconciliation before full-text assessment. Source-level search yields are pending verification against the original database exports.}
   \label{fig:prisma}
 \end{figure*}
-
-\section{Results}
-\label{sec:results}
 
 \subsection{Included evidence and capability coverage}
 \label{subsec:coverage}
@@ -206,7 +233,7 @@ The 30 full-text exclusions were primarily classified as off-vertical settings (
   \label{fig:kappa}
 \end{figure}
 
-\section{Discussion and Researcher Guidance}
+\section{Discussion: Challenges, Opportunities, and Researcher Guidance}
 \label{sec:discussion}
 
 \subsection{Interpretation of the evidence}
@@ -236,9 +263,9 @@ For researchers entering this area, the extraction matrix can be used as a compa
 \section{Limitations}
 \label{sec:limitations}
 
-The findings are bounded by the selected sources, search period, eligibility criteria, and the completeness of the retrieved full texts. The exact database-specific queries, per-source search dates, and protocol publication start year must be verified against the saved search records before submission. The study-level synthesis depends on reviewer interpretation of reported methods; applying the more conservative score where ordinal ratings differed may reduce apparent capability coverage. Full-text kappa was calculated on 319 paired decisions rather than all 323 assessed full texts, and this distinction should be retained when reporting agreement. Finally, the matrix's capability counts should not be generalized beyond the included corpus or interpreted as evidence that a capability is impossible.
+The findings are bounded by the selected sources, search period, eligibility criteria, and the completeness of the retrieved full texts. The exact database-specific queries, source-level record yields, per-source search dates, and protocol publication start year must be verified against the saved search records before submission. The study-level synthesis depends on reviewer interpretation of reported methods; applying the more conservative score where ordinal ratings differed may reduce apparent capability coverage. Full-text kappa was calculated on 319 paired decisions rather than all 323 assessed full texts, and this distinction should be retained when reporting agreement. Finally, the matrix's capability counts should not be generalized beyond the included corpus or interpreted as evidence that a capability is impossible.
 
-\section{Conclusion}
+\section{Conclusions and Future Work}
 \label{sec:conclusion}
 
 This systematic review synthesized 293 studies on heterogeneous-compression FL and blockchain-based verification in the context of resource-constrained IIoT. The consensus matrix found no included study coded Yes for live-resource-driven compression or convergence-guaranteed aggregation across mismatched models, and no study covered all five review capabilities together. The results provide a structured starting point for researchers to compare methods and identify under-addressed combinations. Stronger conclusions and reproducibility depend on retaining the bounded scope of these findings and completing the search-record checks noted in the methods before publication.

@@ -11,7 +11,7 @@ Systematic literature review on heterogeneous-compression federated learning and
 
 ## Method status
 
-The locked selection flow is 4,437 records identified, 1,320 duplicates removed, 3,117 screened, 2,794 title/abstract exclusions after reconciliation, 323 full texts assessed, 30 full-text exclusions, and 293 included studies. See the methods audit trail for the Zotero, Rayyan, Excel, snowballing, and reviewer-agreement details, as well as reporting items to verify against original search records before submission.
+The documented selection flow is 4,475 records identified, 1,346 Zotero duplicates and 12 further Rayyan duplicates removed, 3,117 records screened, 2,794 exclusions before full-text assessment (including eight determined ineligible during reconciliation), 323 full texts assessed, 30 full-text exclusions, and 293 included studies. Per-source yields are pending verification against the original search exports. See the methods audit trail for the Zotero, Rayyan, Excel, snowballing, and reviewer-agreement details.
 
 ## Build
 
