@@ -29,6 +29,10 @@ Backward reference-list checking and forward citation searching (snowballing) we
 
 Search concepts combined synonyms for FL, model compression/heterogeneity, blockchain/integrity verification, and industrial/resource-constrained IoT, with database-specific syntax. The exact executed query for each source and the exact per-source run date should be copied from the original database search histories or Zotero export log into the supplementary search strategy; they are not reconstructed here.
 
+### Reconciliation decision for conflicting collection screenshots
+
+The final manuscript uses the locked source-level yields in the table above (4,437 records), not the separate Zotero screenshot showing 4,475 items. The locked source yields sum to 4,437 and reconcile exactly with the subsequent selection flow: 4,437 − 1,320 = 3,117. The screenshot's stage totals sum to 4,475; its displayed source totals sum to 4,474 because the IEEE Xplore source total (1,565) is one lower than its displayed A–E stage subtotal (1,566). It also reports 866 Google Scholar items rather than the locked 829. Thus the screenshot differs by 38 items from the locked aggregate, with a further one-item internal discrepancy in the screenshot's IEEE row. The available materials do not establish which records account for this difference. We therefore treat that screenshot as a preliminary, superseded collection snapshot—not an additional PRISMA stage—and do not assign the 38 records to duplicates or exclusions without record-level provenance. Before submission, retain the search exports/Zotero history that supports the locked counts; if those exports instead support 4,475, revise the flow and all downstream totals together.
+
 ## Eligibility
 
 Studies published from 2022 through the search period were eligible when they were peer-reviewed journal or top-tier conference primary studies, addressed at least two of heterogeneous compression, FL aggregation under mismatch, blockchain integrity/trust, and IIoT resource constraints, and reported at least one quantitative outcome relevant to the PICOC outcomes.
@@ -85,7 +89,7 @@ Reviewers scored capabilities independently. Where ordinal capability scores dif
 
 No included paper satisfied all five capabilities; the consensus summary also records zero papers satisfying at least three, four, or all five.
 
-**Percentage check:** the supplied results image labels the last row as 7%. However, 16/293 = 5.46%, which rounds to 5% to the nearest whole percentage point. The workbook and manuscript use the mathematically consistent 5%; change this only if the underlying numerator or denominator is corrected.
+**Percentage reconciliation:** the supplied results image labels the last row as 7%, but the locked numerator and denominator give 16/293 = 5.46%, which rounds to **5%** to the nearest whole percentage point. The workbook and manuscript consistently use 5%; the 7% in that image is treated as a calculation/label error unless the underlying study count or denominator is revised.
 
 ## Tool roles
 
@@ -100,8 +104,7 @@ Software versions and the exact Zotero duplicate-detection settings are not reco
 
 - Attach a supplementary file containing the exact query string and run date for each source, copied from the actual search histories; do not recreate queries from memory.
 - Retain/export the Zotero deduplication report or document whether duplicate removal combined automatic matching with manual review.
-- Verify that the final search yield and per-source counts match the exported records. These are the locked final counts supplied by the review team.
-- Reconcile the earlier collection screenshot, which shows 4,475 items and Google Scholar = 866, with the locked PRISMA flow of 4,437 and Google Scholar = 829. This methods record and the updated figure use the locked PRISMA counts; explain whether the difference reflects an earlier pre-filter total, a subsequent exclusion before screening, or a superseded count.
+- Preserve the source exports/Zotero history supporting the locked 4,437 count and per-source yields; do not infer a disposition for the 38-record screenshot discrepancy without record-level provenance.
 - Confirm whether a formal risk-of-bias/study-quality assessment was conducted. No separate appraisal instrument was documented in the reviewed project files.
 - Complete the PRISMA 2020 checklist and PRISMA-S search-reporting checklist; link each item to its manuscript location or supplementary material.
 - Confirm team author names/affiliations and journal-specific review article requirements before submission.
